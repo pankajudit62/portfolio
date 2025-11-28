@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pankaj Paswan - Portfolio</title>
+  <style>
+    /* -------- Theme variables -------- */
+    :root{
+      --bg: #0f1724;
+      --card: #0f1728;
+      --muted: #a6b0c3;
+      --accent: #06b6d4;
+      --glass: rgba(255,255,255,0.04);
+      --text: #e6eef8;
+      --glass-2: rgba(255,255,255,0.02);
+    }
+    [data-theme='light']{
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --muted: #475569;
+      --accent: #0ea5a4;
+      --glass: rgba(15,23,42,0.03);
+      --text: #0b1220;
+      --glass-2: rgba(2,6,23,0.02);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* ---------- Loader ---------- */
+    #loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:2000}
+    .spinner{width:72px;height:72px;border-radius:50%;border:6px solid transparent;border-top-color:var(--accent);animation:spin 1s linear infinite;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* -------- Header -------- */
+    header{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:1100px;padding:12px 18px;border-radius:12px;background:linear-gradient(180deg,var(--glass),var(--glass-2));backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;z-index:1000;box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021026}
+    .brand h2{font-size:1.05rem;color:var(--accent);letter-spacing:0.6px}
+    nav{display:flex;gap:16px;align-items:center}
+    nav a{color:var(--text);text-decoration:none;font-weight:600;padding:8px 10px;border-radius:8px;transition:all .22s}
+    nav a:hover{background:rgba(255,255,255,0.03);color:var(--accent)}
+
+    /* Toggle */
+    .controls{display:flex;gap:12px;align-items:center}
+    .toggle{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;cursor:pointer}
+
+    /* ---------- Sections ---------- */
+    main{max-width:1100px;margin:0 auto;padding:140px 22px 80px}
+    section{padding:40px 0;min-height:60vh}
+
+    /* Home */
+    .home{display:grid;grid-template-columns:1fr 360px;gap:30px;align-items:center}
+    .intro h1{font-size:2.6rem;line-height:1.02;margin-bottom:8px}
+    .accent{color:var(--accent)}
+    .sub{color:var(--muted);margin-bottom:18px}
+    .cta{display:flex;gap:12px}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,var(--card),rgba(255,255,255,0.02));cursor:pointer}
+
+    /* Profile card */
+    .profile{background:var(--card);padding:20px;border-radius:12px;color:var(--text);box-shadow:0 10px 30px rgba(2,6,23,0.5)}
+    .meta p{color:var(--muted);font-size:0.95rem;margin-top:6px}
+
+    /* Grids */
+    .skills-grid,.project-grid,.intern-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:16px}
+    .card{background:linear-gradient(180deg,var(--card),rgba(255,255,255,0.02));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transition:transform .36s,box-shadow .36s}
+    .card h3{color:var(--accent);margin-bottom:8px}
+    .card:hover{transform:translateY(-8px) rotateX(4deg);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+
+    /* Footer */
+    footer{margin-top:40px;padding:22px;background:transparent;text-align:center;color:var(--muted)}
+
+    /* Small screens */
+    @media (max-width:900px){
+      .home{grid-template-columns:1fr;}
+      header{left:12px;transform:none;width:calc(100% - 24px)}
+      main{padding-top:120px}
+    }
+
+    /* -------- Animations & effects -------- */
+    .fade-in{opacity:0;transform:translateY(18px);transition:all .7s cubic-bezier(.2,.9,.2,1)}
+    .fade-in.visible{opacity:1;transform:none}
+    .typing{display:inline-block;white-space:nowrap;overflow:hidden;border-right:2px solid var(--accent);animation:typing 3s steps(28) infinite}
+    @keyframes typing{0%{width:0}50%{width:16ch}100%{width:0}}
+
+    /* Parallax background layers */
+    .parallax{position:fixed;inset:0;z-index:-1;pointer-events:none}
+    .layer{position:absolute;inset:0;background-repeat:no-repeat;background-position:center;background-size:cover;opacity:0.08;transform:translate3d(0,0,0)}
+    .layer.l1{background-image:radial-gradient(circle at 10% 20%,var(--accent), transparent 20%)}
+    .layer.l2{background-image:radial-gradient(circle at 80% 80%,#7c3aed, transparent 20%)}
+
+    /* Cursor trail */
+    .trail-dot{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);opacity:0.9;mix-blend-mode:screen}
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .gap{height:18px}
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader"><div class="spinner"></div></div>
+
+  <!-- Parallax background -->
+  <div class="parallax" aria-hidden>
+    <div class="layer l1"></div>
+    <div class="layer l2"></div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h2>Pankaj Paswan</h2>
+        <div class="muted" style="font-size:0.78rem">Full Stack Developer</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#internship">Internship</a>
+    </nav>
+
+    <div class="controls">
+      <button id="themeToggle" class="toggle" aria-label="Toggle theme">🌗</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="home fade-in">
+      <div class="intro">
+        <h1>Hi, I'm <span class="accent">Pankaj Paswan</span></h1>
+        <div class="muted gap">Languages: C, C++, Core Java, Core Python, JavaScript, SQL, HTML, CSS</div>
+        <h3 class="typing muted">React · Node.js · Express · Tailwind · Bootstrap</h3>
+        <p class="muted" style="margin-top:18px;max-width:58ch">Passionate developer building responsive & performant web applications. I love clean UI, modular code, and solving real problems.</p>
+        <div class="cta" style="margin-top:18px">
+          <a class="btn" href="#projects">View Projects</a>
+          <a class="btn" href="https://github.com/pankajudit62" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <aside class="profile">
+        <h3 style="margin-bottom:6px">Contact</h3>
+        <div class="meta">
+          <p><strong>Mobile:</strong> 7352519918</p>
+          <p><strong>Email:</strong> pankanudit62@gmail.com</p>
+          <p><strong>Location:</strong> Jaipur, Rajasthan (303901)</p>
+          <p style="margin-top:10px"><strong>Developer Tools:</strong> Git, GitHub, Postman, Figma, VS Code, Node.js</p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="skills" class="fade-in">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="card"><h3>Languages</h3><p class="muted">C, C++, Core Java, Core Python, JavaScript, SQL, HTML, CSS</p></div>
+        <div class="card"><h3>Developer Tools</h3><p class="muted">Git, GitHub, Postman, Figma, Node.js, VS Code</p></div>
+        <div class="card"><h3>Technologies / Frameworks</h3><p class="muted">React, Tailwind CSS, Bootstrap, Express.js</p></div>
+      </div>
+    </section>
+
+    <section id="projects" class="fade-in">
+      <h2>Projects</h2>
+      <div class="project-grid">
+        <div class="card"><h3>Blood Bank</h3><p class="muted">Created a responsive blood donation website using HTML, CSS, & JavaScript. Implemented a dynamic inquiry form to capture user data efficiently.</p></div>
+        <div class="card"><h3>Portfolio Website</h3><p class="muted">Designed & developed this portfolio using modern HTML, CSS, and JavaScript. Responsive layout and clean UI components.</p></div>
+      </div>
+    </section>
+
+    <section id="internship" class="fade-in">
+      <h2>Internship / Experience</h2>
+      <div class="intern-grid">
+        <div class="card"><h3>CODEC | Full Stack Developer Intern</h3><p class="muted">Jun 2025 - Jul 2025</p><p class="muted">Worked on full-stack apps using HTML, CSS, JavaScript, Express.js, React.js, Node.js. Collaborated to resolve bugs & optimize performance.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <p class="muted">© 2025 Pankaj Paswan — <a href="https://github.com/pankajudit62" target="_blank">github.com/pankajudit62</a></p>
+    </footer>
+  </main>
+
+  <!-- Cursor trail container (dots will be injected) -->
+  <div id="trail" aria-hidden></div>
+
+  <script>
+    /* ---------- Loader ---------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      // small artificial delay so loader is perceivable
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.transition = 'opacity .4s ease';
+        loader.style.opacity = '0';
+        setTimeout(()=> loader.remove(), 420);
+      }, 500);
+    });
+
+    /* ---------- Theme toggle (persist) ---------- */
+    const toggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved) document.documentElement.setAttribute('data-theme', saved);
+    toggle.addEventListener('click', ()=>{
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? '' : 'light';
+      if(next) document.documentElement.setAttribute('data-theme', next); else document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', next);
+    });
+
+    /* ---------- Fade-in on scroll ---------- */
+    const faders = document.querySelectorAll('.fade-in');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('visible'); });
+    },{threshold:0.18});
+    faders.forEach(f=>io.observe(f));
+
+    /* ---------- Parallax based on mouse ---------- */
+    const l1 = document.querySelector('.layer.l1');
+    const l2 = document.querySelector('.layer.l2');
+    window.addEventListener('mousemove', (e)=>{
+      const x = (e.clientX / window.innerWidth - 0.5) * 30; // -15..15
+      const y = (e.clientY / window.innerHeight - 0.5) * 30;
+      l1.style.transform = `translate3d(${x/2}px,${y/2}px,0)`;
+      l2.style.transform = `translate3d(${ -x/3 }px,${ -y/3 }px,0)`;
+    });
+
+    /* ---------- Cursor trail ---------- */
+    const trail = document.getElementById('trail');
+    const dots = [];
+    const DOTS = 10;
+    for(let i=0;i<DOTS;i++){ const d = document.createElement('div'); d.className='trail-dot'; d.style.background = i%2? 'linear-gradient(45deg,var(--accent),#7c3aed)' : 'linear-gradient(45deg,#7c3aed,var(--accent))'; d.style.opacity = String(1 - i*(0.06)); d.style.width = d.style.height = (10 - i*0.6) + 'px'; document.body.appendChild(d); dots.push(d);} 
+    let mouse = {x:window.innerWidth/2, y:window.innerHeight/2};
+    window.addEventListener('mousemove', e=>{ mouse.x = e.clientX; mouse.y = e.clientY; dots[0].style.left = mouse.x + 'px'; dots[0].style.top = mouse.y + 'px'; });
+    // animate trailing
+    (function anim(){
+      for(let i=1;i<dots.length;i++){
+        const prev = dots[i-1].getBoundingClientRect();
+        dots[i].style.left = prev.left + ( (parseFloat(dots[i].style.left||prev.left) - prev.left) * 0.6 ) + 'px';
+        dots[i].style.top = prev.top + ( (parseFloat(dots[i].style.top||prev.top) - prev.top) * 0.6 ) + 'px';
+      }
+      requestAnimationFrame(anim);
+    })();
+
+    /* ---------- Smooth nav highlight ---------- */
+    const navLinks = document.querySelectorAll('nav a');
+    window.addEventListener('scroll', ()=>{
+      let fromTop = window.scrollY + 120;
+      navLinks.forEach(l=>{
+        const s = document.querySelector(l.getAttribute('href'));
+        if(!s) return;
+        l.style.color = (s.offsetTop <= fromTop && s.offsetTop + s.offsetHeight > fromTop) ? 'var(--accent)' : 'var(--text)';
+      });
+    });
+
+    /* Accessibility: remove trailing dots on reduced motion */
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(prefersReduced.matches){ document.querySelectorAll('.trail-dot').forEach(d => d.remove()); }
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+
